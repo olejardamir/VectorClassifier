@@ -47,9 +47,8 @@ public class VectorClassifier {
 
     private double getSumOfSquares1(String input, TermVector tv) {
         double sum = 0.0;
-        for (int inputValue : generateTermValuesVector(tv.getTerms(),
-                WordFrequency.getWordFrequency(input,
-                        tokenizer, stopWordsProvider))) {
+        Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input, tokenizer, stopWordsProvider);
+        for (int inputValue : generateTermValuesVector(tv.getTerms(), wordFrequency)) {
             double v = (inputValue * inputValue);
             sum += v;
         }
