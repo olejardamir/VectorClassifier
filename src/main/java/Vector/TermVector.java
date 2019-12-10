@@ -2,7 +2,6 @@ package Vector;
 
 import java.io.Serializable;
 
-
 public class TermVector implements Serializable {
     private final String[] terms;
     private final int[] values;
@@ -19,6 +18,4 @@ public class TermVector implements Serializable {
     int[] getValues() {
         return values.clone();
     }
-
-
 }

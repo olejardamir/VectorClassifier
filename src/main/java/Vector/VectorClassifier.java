@@ -25,18 +25,34 @@ public class VectorClassifier {
             return 0;
         }
         int[] two = tv.getValues();
-        return getDenominator(input, tv, two);
+        return getClassificationResult(input, tv, two);
     }
 
-    private double getDenominator(String input, TermVector tv, int[] two) {
+    private double getClassificationResult(String input, TermVector tv, int[] two) {
         double sumOfSquares = getSumOfSquares(two);
         double sumOfSquares1 = getSumOfSquares1(input, tv);
-        double denominator = getDenominator(sumOfSquares, sumOfSquares1);
         int result = getResult(input, tv, two);
+        return calculateResult(sumOfSquares, sumOfSquares1, result);
+    }
+
+    /**
+     *
+     * @param sumOfSquares
+     * @param sumOfSquares1
+     * @param result
+     * @return
+     */
+    public double calculateResult(double sumOfSquares, double sumOfSquares1, int result){
+        double denominator = getDenominator(sumOfSquares, sumOfSquares1);
         return denominator == 0 ? 0 : result / denominator;
     }
 
-    private double getSumOfSquares(int[] two) {
+    /**
+     *
+     * @param two
+     * @return
+     */
+    public double getSumOfSquares(int[] two) {
         double sum = 0.0;
         for (int item : two) {
             double v = (item * item);
@@ -45,7 +61,13 @@ public class VectorClassifier {
         return sum;
     }
 
-    private double getSumOfSquares1(String input, TermVector tv) {
+    /**
+     *
+     * @param input
+     * @param tv
+     * @return
+     */
+    public double getSumOfSquares1(String input, TermVector tv) {
         double sum = 0.0;
         Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input, tokenizer, stopWordsProvider);
         for (int inputValue : generateTermValuesVector(tv.getTerms(), wordFrequency)) {
@@ -55,15 +77,24 @@ public class VectorClassifier {
         return sum;
     }
 
-    private double getDenominator(double sumOfSquares, double sumOfSquares1) {
-        return Math.sqrt(sumOfSquares1) * Math.sqrt(sumOfSquares);
-    }
-
-    private int getResult(String input, TermVector tv, int[] two) {
+    /**
+     *
+     * @param input
+     * @param tv
+     * @param two
+     * @return
+     */
+    public int getResult(String input, TermVector tv, int[] two) {
         int sum = 0;
         Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input, tokenizer, stopWordsProvider);
         return getSum(tv, two, sum, wordFrequency);
     }
+
+    private double getDenominator(double sumOfSquares, double sumOfSquares1) {
+        return Math.sqrt(sumOfSquares1) * Math.sqrt(sumOfSquares);
+    }
+
+
 
     private int getSum(TermVector tv, int[] two, int sum, Map<String, Integer> wordFrequency) {
         int bound = generateTermValuesVector(tv.getTerms(),wordFrequency).length;
@@ -73,7 +104,6 @@ public class VectorClassifier {
         }
         return sum;
     }
-
 
     public void teachMatch(String category, String input, int numTermsInVector) {
         input = input.toLowerCase();
@@ -91,6 +121,4 @@ public class VectorClassifier {
         }
         return result;
     }
-
-
 }

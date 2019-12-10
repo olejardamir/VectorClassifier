@@ -26,6 +26,4 @@ public class WordFrequency {
         }
         return result;
     }
-
-
 }

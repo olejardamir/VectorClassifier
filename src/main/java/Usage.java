@@ -10,7 +10,5 @@ public class Usage {
         vc.teachMatch("category", "hello there is this a long sentence yes it is blah blah hello.",25);
         double result = vc.classify("category", "hello blah");
         System.out.println(result);
-
     }
-
 }
