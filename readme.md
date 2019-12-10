@@ -5,7 +5,7 @@ The goal of this project is to evolve it, given the original potential, into som
 
 
 Added Features:
-Sentence parser
+- Sentence parser
 
 TODO:
 - POS tagger
