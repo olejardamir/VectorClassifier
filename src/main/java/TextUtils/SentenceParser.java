@@ -48,7 +48,7 @@ public StringBuffer parseDoc(String input, String output) throws Exception {
 		}
 		if (word.endsWith("\'") || word.endsWith("\"")) {
 		   word = word.substring(0, word.length() - 1);
-	   }
+		}
 		if (word.endsWith("\'.") || word.endsWith("\".")) {
 		   word = word.substring(0, word.length() - 2);
 		   word = word + ".";
@@ -63,7 +63,5 @@ public StringBuffer parseDoc(String input, String output) throws Exception {
 	   }
 		return word;
 	}
-
-}
-
+ 
 }
