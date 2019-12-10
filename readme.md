@@ -8,9 +8,9 @@ Added Features:
 Sentence parser
 
 TODO:
-POS tagger
-synonym expand for a better classification
-antonym replace for the "opposite meaning" classification
-document training/classification
-arithmetic expressions with logical operators applied onto vectors
-vector resample for comparing the different lenght of sentences
+- POS tagger
+- synonym expand for a better classification
+- antonym replace for the "opposite meaning" classification
+- document training/classification
+- arithmetic expressions with logical operators applied onto vectors
+- vector resample for comparing the different lenght of sentences
