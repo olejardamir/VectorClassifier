@@ -3,9 +3,9 @@ package TextUtils;
 import java.io.*;
 import java.util.ArrayList;
 
-public class SentenceParser {
+class SentenceParser {
 
-private ArrayList<String> abbr = new ArrayList<String>();
+private final ArrayList<String> abbr = new ArrayList<>();
 
 public SentenceParser() throws Exception {
     	BufferedReader br = new BufferedReader(new FileReader("data/abbrEngl.txt"));
@@ -22,46 +22,26 @@ public StringBuffer parseDoc(String input, String output) throws Exception {
      }
 
 	private void parseText(BufferedReader br, StringBuffer sb) throws IOException {
-		String line;
-		while ((line = br.readLine()) != null) {
-			String[] splitline = line.split(" ",-1);
-			for (String word : splitline) {
-				word = readEndOfSentences(word);
-				addLineSeparators(sb, word);
-			}
-		}
+		for (String line = br.readLine(); line != null; )
+      for (String word:line.split(" ",-1)){word=readEndOfSentences(word);addLineSeparators(sb,word);}
 	}
 
 	private void addLineSeparators(StringBuffer sb, String word) {
-		if (word.length() > 1 && !word.endsWith(".") && !word.endsWith("!") && !word.endsWith("?") && !abbr.contains(word)) {
-			sb.append(word).append(" ");
-		} else if (word.length() > 1 && !abbr.contains(word)) {
-			sb.append(word).append(System.getProperty("line.separator"));
-		} else if (word.length() > 0) {
-			sb.append(word).append(" ");
-		}
+		if (word.length() > 1 && !word.endsWith(".") && !word.endsWith("!") && !word.endsWith("?") && !abbr.contains(word)) sb.append(word).append(" ");
+    else if (word.length() > 1 && !abbr.contains(word)) sb.append(word).append(System.getProperty("line.separator"));
+    else if (word.length() > 0) sb.append(word).append(" ");
 	}
 
 	private String readEndOfSentences(String word) {
-		if (word.startsWith("\'") || word.startsWith("\"")) {
-			word = word.substring(1);
-		}
-		if (word.endsWith("\'") || word.endsWith("\"")) {
-		   word = word.substring(0, word.length() - 1);
-		}
-		if (word.endsWith("\'.") || word.endsWith("\".")) {
-		   word = word.substring(0, word.length() - 2);
-		   word = word + ".";
-	   }
-		if (word.endsWith("\'!") || word.endsWith("\"!")) {
-		   word = word.substring(0, word.length() - 2);
-		   word = word + "!";
-	   }
-		if (word.endsWith("\'?") || word.endsWith("\"?")) {
-		   word = word.substring(0, word.length() - 2);
-		   word = word + "?";
-	   }
-		return word;
-	}
+    if (word.startsWith("\'") || word.startsWith("\"")) word = word.substring(1);
+    if (word.endsWith("\'") || word.endsWith("\"")) word = word.substring(0, word.length() - 1);
+    if (word.endsWith("\'.") || word.endsWith("\"."))
+      word = word.substring(0, word.length() - 2) + ".";
+    if (word.endsWith("\'!") || word.endsWith("\"!"))
+      word = word.substring(0, word.length() - 2) + "!";
+    return !word.endsWith("\'?") && !word.endsWith("\"?")
+        ? word
+        : (word = word.substring(0, word.length() - 2) + "?");
+  }
  
 }

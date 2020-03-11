@@ -2,37 +2,13 @@ package TextUtils;
 
 public class DefaultTokenizer   {
     String[] tokenize(String input) {
-        if(input==null) return new String[0];
-        return input.split("["+whitespace_chars+"]");
-    }
+    return input == null
+        ? new String[0]
+        : input.split(
+            "[\\u0009\\u000A\\u000B\\u000C\\u000D\\u0020\\u0085"
+              + "\\u00A0\\u1680\\u180E\\u2000\\u2001\\u2002\\u2003"
+              + "\\u2004\\u2005\\u2006\\u2007\\u2008\\u2009\\u200A"
+              + "\\u2028\\u2029\\u202F\\u205F\\u3000\\W]");
+  }
 
-    private String whitespace_chars =  ""       /* dummy empty string for homogeneity */
-            + "\\u0009" // CHARACTER TABULATION
-            + "\\u000A" // LINE FEED (LF)
-            + "\\u000B" // LINE TABULATION
-            + "\\u000C" // FORM FEED (FF)
-            + "\\u000D" // CARRIAGE RETURN (CR)
-            + "\\u0020" // SPACE
-            + "\\u0085" // NEXT LINE (NEL)
-            + "\\u00A0" // NO-BREAK SPACE
-            + "\\u1680" // OGHAM SPACE MARK
-            + "\\u180E" // MONGOLIAN VOWEL SEPARATOR
-            + "\\u2000" // EN QUAD
-            + "\\u2001" // EM QUAD
-            + "\\u2002" // EN SPACE
-            + "\\u2003" // EM SPACE
-            + "\\u2004" // THREE-PER-EM SPACE
-            + "\\u2005" // FOUR-PER-EM SPACE
-            + "\\u2006" // SIX-PER-EM SPACE
-            + "\\u2007" // FIGURE SPACE
-            + "\\u2008" // PUNCTUATION SPACE
-            + "\\u2009" // THIN SPACE
-            + "\\u200A" // HAIR SPACE
-            + "\\u2028" // LINE SEPARATOR
-            + "\\u2029" // PARAGRAPH SEPARATOR
-            + "\\u202F" // NARROW NO-BREAK SPACE
-            + "\\u205F" // MEDIUM MATHEMATICAL SPACE
-            + "\\u3000" // IDEOGRAPHIC SPACE
-            + "\\W"
-            ;
 }

@@ -8,7 +8,7 @@ package TextUtils;
  import java.util.Arrays;
 
 public class DefaultStopWordsProvider   {
-     private ArrayList<String> stopWords;
+     private final ArrayList<String> stopWords;
 
     public DefaultStopWordsProvider(String s) throws Exception {
         stopWords = new ArrayList<>();
@@ -18,7 +18,7 @@ public class DefaultStopWordsProvider   {
 
     private void loadStopWords(String s) throws IOException {
         BufferedReader read = new BufferedReader(new FileReader(s));
-        String l = "";
+        String l;
         while((l=read.readLine())!=null){
             l=l.toLowerCase().trim();
             if(!stopWords.contains(l))

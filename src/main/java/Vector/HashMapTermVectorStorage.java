@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HashMapTermVectorStorage {
-    private Map<String, TermVector> storage = new HashMap<>();
+    private final Map<String, TermVector> storage = new HashMap<>();
     public void addTermVector(String category, TermVector termVector) {
         storage.put(category, termVector);
     }
