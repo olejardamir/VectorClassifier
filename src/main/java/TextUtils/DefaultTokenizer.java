@@ -1,6 +1,6 @@
 package TextUtils;
 
-public class DefaultTokenizer   {
+class DefaultTokenizer   {
     String[] tokenize(String input) {
     return input == null
         ? new String[0]

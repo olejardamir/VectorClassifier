@@ -1,22 +1,12 @@
 package Vector;
 
-import TextUtils.DefaultStopWordsProvider;
-import TextUtils.DefaultTokenizer;
 import TextUtils.WordFrequency;
+
 import java.util.Map;
-import java.util.Set;
 
 public class VectorClassifier {
 
-    private final DefaultTokenizer tokenizer;
-    private final DefaultStopWordsProvider stopWordsProvider;
-    private final HashMapTermVectorStorage storage;
-
-    public VectorClassifier(HashMapTermVectorStorage storage, DefaultStopWordsProvider stopWordsProvider) {
-        tokenizer = new DefaultTokenizer();
-        this.storage = storage;
-        this.stopWordsProvider = stopWordsProvider;
-    }
+    private final HashMapTermVectorStorage storage = new HashMapTermVectorStorage();
 
     public double classify(String category, String input) {
     input = input.toLowerCase();
@@ -42,13 +32,13 @@ public class VectorClassifier {
 
     private double getSumOfSquares1(String input, TermVector tv) {
         double sum = 0.0;
-        Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input, tokenizer, stopWordsProvider);
+        Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input);
         for (int inputValue : generateTermValuesVector(tv.getTerms(), wordFrequency)) sum += inputValue * inputValue;
         return sum;
     }
 
     private int getResult(String input, TermVector tv, int[] two) {
-        return getSum(tv, two, 0, WordFrequency.getWordFrequency(input, tokenizer, stopWordsProvider));
+        return getSum(tv, two, WordFrequency.getWordFrequency(input));
     }
 
     private double getDenominator(double sumOfSquares, double sumOfSquares1) {
@@ -57,17 +47,18 @@ public class VectorClassifier {
 
 
 
-    private int getSum(TermVector tv, int[] two, int sum, Map<String, Integer> wordFrequency) {
+    private int getSum(TermVector tv, int[] two, Map<String, Integer> wordFrequency) {
+        int sum = 0;
         for (int bound = generateTermValuesVector(tv.getTerms(), wordFrequency).length, i = 0;
         i < bound;
         ++i) sum += generateTermValuesVector(tv.getTerms(), wordFrequency)[i] * two[i];
         return sum;
     }
 
-    public void teachMatch(String category, String input, int numTermsInVector) {
+    public void teach(String category, String input) {
         input = input.toLowerCase();
-        Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input, tokenizer, stopWordsProvider);
-        String[] terms = (String[]) WordFrequency.getMostFrequentWords(numTermsInVector, wordFrequency).toArray(new String[0]);
+        Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input);
+        String[] terms = WordFrequency.getMostFrequentWords(wordFrequency.size(), wordFrequency);
         storage.addTermVector(category, new TermVector(terms, generateTermValuesVector(terms, wordFrequency)));
     }
 

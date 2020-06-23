@@ -1,23 +1,25 @@
 package TextUtils;
 
 
- import java.io.BufferedReader;
- import java.io.FileReader;
- import java.io.IOException;
- import java.util.ArrayList;
- import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class DefaultStopWordsProvider   {
-     private final ArrayList<String> stopWords;
+class DefaultStopWordsProvider   {
+     private final List<String> stopWords;
 
-    public DefaultStopWordsProvider(String s) throws Exception {
+    public DefaultStopWordsProvider(String s) {
         stopWords = new ArrayList<>();
         loadStopWords(s);
-        Arrays.sort(new ArrayList[]{stopWords});
+        Arrays.sort(new ArrayList[]{(ArrayList) stopWords});
     }
 
-    private void loadStopWords(String s) throws IOException {
-        BufferedReader read = new BufferedReader(new FileReader(s));
+    private void loadStopWords(String s) {
+        try {
+            BufferedReader read  = new BufferedReader(new FileReader(s));
+
         String l;
         while((l=read.readLine())!=null){
             l=l.toLowerCase().trim();
@@ -25,12 +27,12 @@ public class DefaultStopWordsProvider   {
                 stopWords.add(l);
         }
         read.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isStopWord(String word) {
-        return stopWords.contains(word); //we already convert input to lowercase.
+        return stopWords.contains(word);
     }
-
-
-
 }
