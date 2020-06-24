@@ -6,7 +6,7 @@ public class TermVector implements Serializable {
     private final String[] terms;
     private final int[] values;
 
-    TermVector(String[] terms, int[] values) {
+    public TermVector(String[] terms, int[] values) {
         this.terms = terms;
         this.values = values;
     }

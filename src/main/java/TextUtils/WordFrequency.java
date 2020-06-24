@@ -5,7 +5,7 @@ import java.util.*;
 public class WordFrequency {
 
     private static final DefaultTokenizer tokenizer = new DefaultTokenizer();
-    private static final DefaultStopWordsProvider stopWordsProvider = new DefaultStopWordsProvider("data/stopwords.txt");
+    private static DefaultStopWordsProvider stopWordsProvider = new DefaultStopWordsProvider("data/stopwords.txt");
 
     public static Map<String, Integer> getWordFrequency(String input) {
         Map<String, Integer> ret = new TreeMap<>();

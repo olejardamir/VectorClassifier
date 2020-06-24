@@ -6,12 +6,13 @@ import java.util.Map;
 
 public class VectorClassifier {
 
-    private final HashMapTermVectorStorage storage = new HashMapTermVectorStorage();
+    protected TermVector category;
+    protected Map<String, Integer> wordFrequency;
 
-    public double classify(String category, String input) {
+
+    public double classify(String input) {
     input = input.toLowerCase();
-    TermVector tv = storage.getTermVector(category);
-    return tv == null ? 0 : getClassificationResult(input, tv, tv.getValues());
+    return category == null ? 0 : getClassificationResult(input, category, category.getValues());
   }
 
     private double getClassificationResult(String input, TermVector tv, int[] two) {
@@ -55,14 +56,9 @@ public class VectorClassifier {
         return sum;
     }
 
-    public void teach(String category, String input) {
-        input = input.toLowerCase();
-        Map<String, Integer> wordFrequency = WordFrequency.getWordFrequency(input);
-        String[] terms = WordFrequency.getMostFrequentWords(wordFrequency.size(), wordFrequency);
-        storage.addTermVector(category, new TermVector(terms, generateTermValuesVector(terms, wordFrequency)));
-    }
 
-    private int[] generateTermValuesVector(String[] terms, Map<String, Integer>  wordFrequencies) {
+
+    protected int[] generateTermValuesVector(String[] terms, Map<String, Integer> wordFrequencies) {
         int[] result = new int[terms.length];
         for (int i = 0; i < terms.length; ++i) {
             Integer value = wordFrequencies.get(terms[i]);
@@ -70,4 +66,98 @@ public class VectorClassifier {
         }
         return result;
     }
+
+    protected Map<String, Integer> init(String input) {
+        input = input.toLowerCase();
+        return WordFrequency.getWordFrequency(input);
+    }
+    //--------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------
+    //A simple train with the new data, or override the old train data with the new data
+    public void newVectorFromInput(String input){
+        Map<String, Integer> wordFrequency_ = init(input);
+        newVectorFromInput(wordFrequency_);
+    }
+    public void newVectorFromInput(Map<String, Integer> frequency) {
+        wordFrequency = frequency;
+        String[] terms = WordFrequency.getMostFrequentWords(wordFrequency.size(), wordFrequency);
+        category = new TermVector(terms, generateTermValuesVector(terms, wordFrequency));
+    }
+    //--------------------------------------------------------------------------------
+    //Add additional data
+    public void mergeInputToVector(String input) {
+        Map<String, Integer> wordFrequency_ = init(input);
+        mergeInputToVector(wordFrequency_);
+    }
+
+    public void mergeInputToVector(Map<String, Integer> wordFrequency_) {
+        if(wordFrequency!=null) {
+            for (String str : wordFrequency_.keySet()) {
+                int oldFreq = 0;
+                if(wordFrequency.containsKey(str)) {
+                    oldFreq = wordFrequency.get(str);
+                }
+                int newFreq = wordFrequency_.get(str);
+                int result = oldFreq + newFreq;
+                wordFrequency.put(str, result);
+            }
+            String[] terms = WordFrequency.getMostFrequentWords(wordFrequency.size(), wordFrequency);
+            category = new TermVector(terms, generateTermValuesVector(terms, wordFrequency));
+        }
+        else{
+            newVectorFromInput(wordFrequency_);
+        }
+    }
+
+    //--------------------------------------------------------------------------------
+    //Train with the new data but don't add any new words to existing tran set.
+    public void mapInputToVector(String input) {
+        Map<String, Integer> wordFrequency_ = init(input);
+        mapInputToVector(wordFrequency_);
+    }
+
+    public void mapInputToVector(Map<String, Integer> wordFrequency_) {
+        if(wordFrequency!=null) {
+            for (String str : wordFrequency_.keySet()) {
+                if(wordFrequency.containsKey(str)) {
+                    int oldFreq = wordFrequency.get(str);
+                    int newFreq = wordFrequency_.get(str);
+                    int result = oldFreq + newFreq;
+                    wordFrequency.put(str, result);
+                }
+            }
+            String[] terms = WordFrequency.getMostFrequentWords(wordFrequency.size(), wordFrequency);
+            category = new TermVector(terms, generateTermValuesVector(terms, wordFrequency));
+        }
+    }
+
+    //-----------------------------------------
+    //Do the opposite of learning, remove from the learned.
+    public void subtractInputFromVector(String input) {
+        Map<String, Integer> wordFrequency_ = init(input);
+        subtractInputFromVector(wordFrequency_);
+    }
+
+    public void subtractInputFromVector(Map<String, Integer> wordFrequency_) {
+        if(wordFrequency!=null) {
+            for (String str : wordFrequency_.keySet()) {
+                if (wordFrequency.containsKey(str)) {
+                    int oldFreq = wordFrequency.get(str);
+                    int newFreq = wordFrequency_.get(str);
+                    int result = oldFreq - newFreq;
+                    if (result < 1) {
+                        wordFrequency.remove(str);
+                    } else {
+                        wordFrequency.put(str, result);
+                    }
+                }
+            }
+            String[] terms = WordFrequency.getMostFrequentWords(wordFrequency.size(), wordFrequency);
+            category = new TermVector(terms, generateTermValuesVector(terms, wordFrequency));
+        }
+    }
+
+
+
+
 }
