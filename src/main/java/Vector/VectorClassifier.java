@@ -110,7 +110,7 @@ public class VectorClassifier {
     }
 
     //--------------------------------------------------------------------------------
-    //Train with the new data but don't add any new words to existing tran set.
+    //Train with the new data but don't add any new words to existing train set.
     public void mapInputToVector(String input) {
         Map<String, Integer> wordFrequency_ = init(input);
         mapInputToVector(wordFrequency_);
